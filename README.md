@@ -2,7 +2,7 @@
 
 passwdgen is a simple password generator
 
-```bash
+```
 Usage: ./passwdgen [options]
 
     -l, --length         Length of password
