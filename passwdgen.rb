@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require 'optparse'
+require 'slop'
 
 class PasswordGenerator
   def initialize(length, has_numbers: true, has_alphabets: false, has_special_chars: false)
@@ -30,27 +30,18 @@ class PasswordGenerator
   end
 end
 
-options = {}
+options = Slop.parse do |o|
+  o.banner = "passwdgen is a simple password generator\n\nUsage: passwdgen [options]\n"
+  o.integer '-l', '--length', 'Length of password', default: 16
+  o.bool '-n', '--numbers', 'Include numbers in password'
+  o.bool '-a', '--alphabets', 'Include alphabets in password', default: true
+  o.bool '-s', '--special-chars', 'Include special characters in password'
 
-OptionParser.new do |opts|
-  opts.banner = 'Usage: main.rb [options]'
-
-  opts.on('-l', '--length [INTEGER]', Integer) do |l|
-    options[:length] = l
+  o.on '-h', '--help' do
+    puts o
+    exit
   end
-
-  opts.on('-n', '--numbers') do
-    options[:numbers] = true
-  end
-
-  opts.on('-a', '--alphabets') do
-    options[:alphabets] = true
-  end
-
-  opts.on('-s', '--special-chars') do
-    options[:special_chars] = true
-  end
-end.parse!
+end
 
 password_generator = PasswordGenerator.new(options[:length],
                                            has_numbers: options[:numbers],
